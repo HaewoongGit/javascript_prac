@@ -1,97 +1,105 @@
 <!DOCTYPE html>
 <html lang="ko">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-    </head>
-    <style>
-        .normal-table {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
 
-        .normal-table th,
-        .normal-table td {
-            border: 1px solid black;
-            padding: 5px 10px;
-        }
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+<style>
+    .normal-table {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    
+    .normal-table th,
+    .normal-table td {
+        border: 1px solid black;
+        padding: 5px 10px;
+    }
+    
+    .normal-table th,
+    .normal-table td {
+        border: 1px solid black;
+        padding: 5px, 10px;
+    }
+    
+    .normal-table thead tr {
+        background-color: yellow;
+    }
+    
+    .striped tbody tr:nth-child(2n) {
+        background-color: grey;
+    }
+</style>
 
-        .normal-table th,
-        .normal-table td {
-            border: 1px solid black;
-            padding: 5px, 10px;
-        }
-
-        .normal-table thead tr {
-            background-color: yellow;
-        }
-
-        .striped tbody tr:nth-child(2n) {
-            background-color: grey;
-        }
-    </style>
-    <body>
-        <select name="" id="gender">
+<body>
+    <select name="" id="gender">
             <option value="">전체</option>
             <option value="male">남자</option>
             <option value="female">여자</option>
         </select>
-        <input type="search" name="" id="name" placeholder="Name" />
-        <button onclick="dosearch()">조회</button>
-        <table class="normal-table striped">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Company</th>
-                    <th>Gender</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                </tr>
-            </thead>
-            <tbody id="tbBody"></tbody>
-        </table>
-        <script>
-            async function dosearch() {
-                const gender = document.querySelector("#gender").value;
-                const name = document.querySelector("#name").value;
+    <input type="search" name="" id="name" placeholder="Name" />
+    <button onclick="dosearch()">조회</button>
+    <button onclick="goToCreate()">생성</button>
+    <table class="normal-table striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Company</th>
+                <th>Gender</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody id="tbBody"></tbody>
+    </table>
+    <script>
+        async function dosearch() {
+            const gender = document.querySelector("#gender").value;
+            const name = document.querySelector("#name").value;
 
-                let resource = "http://localhost:3000/customers";
-                if (gender === "") {
-                    if (name != "") {
-                        resource = `http://localhost:3000/customers?name_like=${name}`;
-                    }
+            let resource = "http://localhost:3000/customers";
+            if (gender === "") {
+                if (name != "") {
+                    resource = `http://localhost:3000/customers?name_like=${name}`;
+                }
+            } else {
+                if (name != "") {
+                    resource = `http://localhost:3000/customers?gender=${gender}&name_like=${name}`;
                 } else {
-                    if (name != "") {
-                        resource = `http://localhost:3000/customers?gender=${gender}&name_like=${name}`;
-                    } else {
-                        resource = `http://localhost:3000/customers?gender=${gender}`;
-                    }
+                    resource = `http://localhost:3000/customers?gender=${gender}`;
                 }
-
-                const res = await fetch(resource);
-                const resJson = await res.json();
-
-                renderTable(resJson);
             }
 
-            function renderTable(data) {
-                const h = [];
-                for (const item of data) {
-                    h.push(`<tr>`);
-                    h.push(`<td>${item.name}</td>`);
-                    h.push(`<td>${item.company}</td>`);
-                    h.push(`<td>${item.gender}</td>`);
-                    h.push(`<td>${item.email}</td>`);
-                    h.push(`<td>${item.phone}</td>`);
-                    h.push(`<td>${item.address}</td>`);
-                    h.push(`</tr>`);
-                }
+            const res = await fetch(resource);
+            const resJson = await res.json();
 
-                document.querySelector("#tbBody").innerHTML = h.join("");
+            renderTable(resJson);
+        }
+
+        function renderTable(data) {
+            const h = [];
+            for (const item of data) {
+                h.push(`<tr>`);
+                h.push(`<td>${item.name}</td>`);
+                h.push(`<td>${item.company}</td>`);
+                h.push(`<td>${item.gender}</td>`);
+                h.push(`<td>${item.email}</td>`);
+                h.push(`<td>${item.phone}</td>`);
+                h.push(`<td>${item.address}</td>`);
+                h.push(`</tr>`);
             }
-        </script>
-    </body>
+
+            document.querySelector("#tbBody").innerHTML = h.join("");
+        }
+
+        function goToCreate() {
+            document.location.href = "dom_crud_create.html"
+        }
+    </script>
+</body>
+
 </html>

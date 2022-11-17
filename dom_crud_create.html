@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .col-4 {
+            flex: 33.3333%;
+            margin-bottom: 10px;
+        }
+        
+        .col-8 {
+            flex: 66.6666%;
+            margin-bottom: 10px;
+        }
+        
+        input.form-control {
+            width: 100%;
+            /* 70%안에서 100% 쓰겠다.*/
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-4">
+            <label for="name">Name</label>
+        </div>
+        <div class="col-8">
+            <input type="text" name="" id="name" class="form-control">
+        </div>
+        <div class="col-4">
+            <label for="name">Gender</label>
+        </div>
+        <div class="col-8">
+            <input type="radio" name="gender" id="male" value="male">
+            <label for="male">남자</label>
+            <input type="radio" name="gender" id="female" value="female">
+            <label for="female">여자</label>
+        </div>
+        <div class="col-4">
+            <label for="company">Company</label>
+        </div>
+        <div class="col-8">
+            <input type="text" id="company" class="form-control">
+        </div>
+        <div class="col-4">
+            <label for="email">Email</label>
+        </div>
+        <div class="col-8">
+            <input type="email" id="email" class="form-control">
+        </div>
+        <div class="col-4">
+            <label for="phone">phone</label>
+        </div>
+        <div class="col-8">
+            <input type="tel" id="phone" class="form-control">
+        </div>
+        <div class="col-4">
+            <label for="address">Address</label>
+        </div>
+        <div class="col-8">
+            <input type="tel" id="address" class="form-control">
+        </div>
+        <div>
+            <button onclick="doCreate()">저장</button>
+            <button onclick="goTOList()">목록</button>
+        </div>
+    </div>
+    <script>
+        async function doCreate() {
+            const name = document.querySelector('#name').value.trim()
+            const gender = document.querySelector("[name=gender]:checked").value
+
+        }
+    </script>
+</body>
+
+</html>

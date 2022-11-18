@@ -1,144 +1,164 @@
 <!DOCTYPE html>
 <html lang="ko">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-        <style>
-            * {
-                box-sizing: border-box;
-            }
 
-            .row {
-                display: flex;
-                flex-wrap: wrap;
-            }
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .col-4 {
+            flex: 33.3333%;
+            margin-bottom: 10px;
+        }
+        
+        .col-8 {
+            flex: 66.6666%;
+            margin-bottom: 10px;
+        }
+        
+        .alert {
+            color: red;
+        }
+        
+        input.form-control {
+            width: 100%;
+            /* 70%안에서 100% 쓰겠다.*/
+            padding: 5px 10px;
+        }
+    </style>
+</head>
 
-            .col-4 {
-                flex: 33.3333%;
-                margin-bottom: 10px;
-            }
-
-            .col-8 {
-                flex: 66.6666%;
-                margin-bottom: 10px;
-            }
-
-            input.form-control {
-                width: 100%;
-                /* 70%안에서 100% 쓰겠다.*/
-                padding: 5px 10px;
-            }
-        </style>
-    </head>
-
-    <body>
-        <div class="row">
-            <div class="col-4">
-                <label for="name">Name</label>
-            </div>
-            <div class="col-8">
-                <input type="text" name="" id="name" class="form-control" />
-            </div>
-            <div class="col-4">
-                <label for="name">Gender</label>
-            </div>
-            <div class="col-8">
-                <input type="radio" name="gender" id="male" value="male" />
-                <label for="male">남자</label>
-                <input type="radio" name="gender" id="female" value="female" />
-                <label for="female">여자</label>
-            </div>
-            <div class="col-4">
-                <label for="company">Company</label>
-            </div>
-            <div class="col-8">
-                <input type="text" id="company" class="form-control" />
-            </div>
-            <div class="col-4">
-                <label for="email">Email</label>
-            </div>
-            <div class="col-8">
-                <input type="email" id="email" class="form-control" />
-            </div>
-            <div class="col-4">
-                <label for="phone">phone</label>
-            </div>
-            <div class="col-8">
-                <input type="tel" id="phone" class="form-control" />
-            </div>
-            <div class="col-4">
-                <label for="address">Address</label>
-            </div>
-            <div class="col-8">
-                <input type="tel" id="address" class="form-control" />
-            </div>
-            <div>
-                <button onclick="doCreate()">저장</button>
-                <button onclick="goTOList()">목록</button>
-            </div>
+<body>
+    <div class="row">
+        <div class="col-4">
+            <label for="name">Name</label>
         </div>
-        <script>
-            async function doCreate() {
-                const name = document.querySelector("#name").value.trim();
-                const gender = document.querySelector(
-                    "[name=gender]:checked"
-                ).value;
-                const company = document.querySelector("#company").value.trim();
-                const email = document.querySelector("#email").value.trim();
-                const phone = document.querySelector("#phone").value.trim();
-                const address = document.querySelector("#address").value.trim();
+        <div class="col-8">
+            <input type="text" name="" id="name" class="form-control" />
+        </div>
+        <div class="col-4">
+            <label for="name">Gender</label>
+        </div>
+        <div class="col-8">
+            <input type="radio" name="gender" id="male" value="male" />
+            <label for="male">남자</label>
+            <input type="radio" name="gender" id="female" value="female" />
+            <label for="female">여자</label>
+        </div>
+        <div class="col-4">
+            <label for="company">Company</label>
+        </div>
+        <div class="col-8">
+            <input type="text" id="company" class="form-control" />
+        </div>
+        <div class="col-4">
+            <label for="email">Email</label>
+        </div>
+        <div class="col-8">
+            <input type="email" id="email" class="form-control" onblur="checkEmail()" />
+            <div id="emailMsg" style="display:none">올바른 형식의 이메일을 입력하세요.</div>
+        </div>
+        <div class="col-4">
+            <label for="phone">phone</label>
+        </div>
+        <div class="col-8">
+            <input type="tel" id="phone" class="form-control" />
+        </div>
+        <div class="col-4">
+            <label for="address">Address</label>
+        </div>
+        <div class="col-8">
+            <input type="tel" id="address" class="form-control" />
+        </div>
+        <div>
+            <button onclick="doCreate()">저장</button>
+            <button onclick="goTOList()">목록</button>
+        </div>
+    </div>
+    <script>
+        async function doCreate() {
+            const name = document.querySelector("#name").value.trim();
+            const gender = document.querySelector(
+                "[name=gender]:checked"
+            ).value;
+            const company = document.querySelector("#company").value.trim();
+            const email = document.querySelector("#email").value.trim();
+            const phone = document.querySelector("#phone").value.trim();
+            const address = document.querySelector("#address").value.trim();
 
-                if (name === "") {
-                    return alert("name을 입력하세요.");
+            if (name === "") {
+                return alert("name을 입력하세요.");
+            }
+
+            if (company === "") {
+                return alert("company를 입력하세요.");
+            }
+
+
+
+            const regexpTel =
+                /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+
+            if (!regexpTel.test(phone)) {
+                return alert("올바른 번호를 입력하세요.");
+            }
+
+            if (address === "") {
+                return alert("address를 입력하세요.");
+            }
+
+            if (confirm("정말 저장하시겠습니까?")) {
+                const res = await fetch("http://localhost:3000/customers", {
+                    method: "post",
+                    body: JSON.stringify({
+                        name: name,
+                        gender: gender,
+                        company: company,
+                        email: email,
+                        phone: phone,
+                        address: address,
+                    }),
+                    headers: {
+                        "content-type": "application/json;charset=UTF-8",
+                    },
+                });
+                if (res.status === 201) {
+                    alert("정상적으로 생성되었습니다.");
+                } else {
+                    alert(
+                        "고객 정보를 생성하지 못했습니다. 다시 시도하세요."
+                    );
                 }
+            }
+        }
 
-                if (company === "") {
-                    return alert("company를 입력하세요.");
-                }
+        function checkEmail() {
+            const email = document.querySelector("#email").value;
 
+            if (email !== "") {
                 const regexpEmail = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
 
                 if (!regexpEmail.test(email)) {
-                    return alert("올바른 이메일을 입력하세요.");
+                    document.querySelector("#emailMsg").style.display = "";
+                } else {
+                    document.querySelector("#emailMsg").style.display = "none";
                 }
-
-                const regexpTel =
-                    /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
-
-                if (!regexpTel.test(phone)) {
-                    return alert("올바른 번호를 입력하세요.");
-                }
-
-                if (address === "") {
-                    return alert("address를 입력하세요.");
-                }
-
-                if (confirm("정말 저장하시겠습니까?")) {
-                    const res = await fetch("http://localhost:3000/customers", {
-                        method: "post",
-                        body: JSON.stringify({
-                            name: name,
-                            gender: gender,
-                            company: company,
-                            email: email,
-                            phone: phone,
-                            address: address,
-                        }),
-                        headers: {
-                            "content-type": "application/json;charset=UTF-8",
-                        },
-                    });
-                    if (res.status === 201) {
-                        alert("정상적으로 생성되었습니다.");
-                    } else {
-                        alert(
-                            "고객 정보를 생성하지 못했습니다. 다시 시도하세요."
-                        );
-                    }
-                }
+            } else {
+                document.querySelector("#emailMsg").style.display = "none";
             }
-        </script>
-    </body>
+
+        }
+    </script>
+</body>
+
 </html>

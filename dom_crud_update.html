@@ -125,13 +125,38 @@
                 />
             </div>
             <div>
-                <button onclick="doCreate()">저장</button>
+                <button onclick="doSave()">수정</button>
                 <button onclick="goToList()">목록</button>
             </div>
         </div>
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <script src="./js/common.js"></script>
         <script>
-            async function doCreate() {
+            async function doSearchDetail() {
+                const { id } = parseQueryString();
+                customerId = id;
+                const res = await fetch(
+                    `http://localhost:3000/customers/${id}`
+                );
+                const resJson = await res.json();
+                renderDetail(resJson);
+            }
+
+            function renderDetail(data) {
+                console.log(data.zonecode);
+                document.querySelector("#name").value = data.name;
+                document.querySelector("#" + data.gender).checked = true;
+                document.querySelector("#company").value = data.company;
+                document.querySelector("#email").value = data.email;
+                document.querySelector("#phone").value = data.phone;
+                document.querySelector("#address").value = data.roadAddress;
+                document.querySelector("#address2").value = data.address2;
+                document.querySelector("#zonecode").value = data.zonecode;
+            }
+
+            doSearchDetail();
+
+            async function doSave() {
                 const name = document.querySelector("#name").value.trim();
                 const gender = document.querySelector(
                     "[name=gender]:checked"
@@ -155,31 +180,39 @@
 
                 const zonecode = document.querySelector("#zonecode").value;
                 const address2 = document.querySelector("#address2").value;
+                const roadAddress =
+                    document.querySelector("#address").value;
 
-                if (confirm("정말 저장하시겠습니까?")) {
-                    const res = await fetch("http://localhost:3000/customers", {
-                        method: "post",
-                        body: JSON.stringify({
-                            name: name,
-                            gender: gender,
-                            company: company,
-                            email: email,
-                            phone: phone,
-                            address:
-                                `(${zonecode})${address} ${address2}`.trim(),
-                            zonecode: zonecode,
-                            roadAddress: address,
-                            address2: address2,
-                        }),
-                        headers: {
-                            "content-type": "application/json;charset=UTF-8",
-                        },
-                    });
-                    if (res.status === 201) {
-                        alert("정상적으로 생성되었습니다.");
+                const { id } = parseQueryString();
+
+                if (confirm("정말 수정하시겠습니까?")) {
+                    const res = await fetch(
+                        `http://localhost:3000/customers/${id}`,
+                        {
+                            method: "PUT",
+                            body: JSON.stringify({
+                                name: name,
+                                gender: gender,
+                                company: company,
+                                email: email,
+                                phone: phone,
+                                address:
+                                    `(${zonecode})${address} ${address2}`.trim(),
+                                zonecode: zonecode,
+                                roadAddress: roadAddress,
+                                address2: address2,
+                            }),
+                            headers: {
+                                "content-type":
+                                    "application/json;charset=UTF-8",
+                            },
+                        }
+                    );
+                    if (res.status === 200) {
+                        alert("정상적으로 수정되었습니다.");
                     } else {
                         alert(
-                            "고객 정보를 생성하지 못했습니다. 다시 시도하세요."
+                            "고객 정보를 수정하지 못했습니다. 다시 시도하세요."
                         );
                     }
                 }
